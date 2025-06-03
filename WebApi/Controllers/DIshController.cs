@@ -20,7 +20,7 @@ namespace Lab7.Controllers
         }
 
         [HttpGet("GetDishes")]
-        public OkObjectResult GetDishes() {
+        public IActionResult GetDishes() {
             var dishModels = _service.GetAllDishes();
             var result = new List<DishDTO>();
             foreach(DishBusinessModel dish in dishModels)
@@ -28,12 +28,17 @@ namespace Lab7.Controllers
                 result.Add(_mapper.Map<DishDTO>(dish));
             }
             
-            return new OkObjectResult(result);
+            return Ok(result);
         }
         [HttpPost("Create")]
         public IActionResult Create(DishDTO dish)
         {
+            if(String.IsNullOrEmpty(dish.name) || String.IsNullOrEmpty(dish.description))
+            {
+                return BadRequest("Name or descriptions can not be empty");
+            }
             var dishBusinessModel = _mapper.Map<DishBusinessModel>(dish);
+            
             var id = _service.CreateDish(dishBusinessModel);
             return Ok(id);
         }
@@ -55,6 +60,10 @@ namespace Lab7.Controllers
         [HttpPut("Update")]
         public IActionResult Update(BaseMenuItemDTO item)
         {
+            if (String.IsNullOrEmpty(item.name) || String.IsNullOrEmpty(item.description))
+            {
+                return BadRequest("Name or descriptions can not be empty");
+            }
             var modelToUpdate = _mapper.Map<BaseMenuItemBusinessModel>(item);
             _service.UpdateDish(modelToUpdate);
             return Ok();

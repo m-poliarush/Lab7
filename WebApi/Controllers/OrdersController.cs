@@ -30,9 +30,18 @@ namespace Lab7.Controllers
         [HttpPost("CreateOrder")]
         public IActionResult CreateOrder([FromBody] OrderDTO order)
         {
+            if(order.dishDTOs.Count < 1)
+            {
+                return BadRequest("Order list can not be empty");
+            }
             var orderModel = _mapper.Map<OrderBusinessModel>(order);
-
-            _orderService.CreateOrder(orderModel);
+            try
+            {
+                _orderService.CreateOrder(orderModel);
+            }
+            catch (Exception ex) {
+                return BadRequest("Wrong id");
+            }
             return Ok();
         }
 

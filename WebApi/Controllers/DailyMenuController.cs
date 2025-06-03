@@ -33,9 +33,17 @@ namespace Lab7.Controllers
         [HttpPut("Update")]
         public IActionResult UpdateMenu(DailyMenuDTO menu)
         {
-            var newMenuModel = _mapper.Map<DailyMenuBusinessModel>(menu);
-            _dailyMenuService.UpdateMenu(newMenuModel);
-            return Ok(newMenuModel);
+            try
+            {
+                var newMenuModel = _mapper.Map<DailyMenuBusinessModel>(menu);
+                _dailyMenuService.UpdateMenu(newMenuModel);
+                return Ok(newMenuModel);
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
     }
 }
