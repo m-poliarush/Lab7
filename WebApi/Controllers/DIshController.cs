@@ -23,13 +23,14 @@ namespace Lab7.Controllers
         public IActionResult GetDishes() {
             var dishModels = _service.GetAllDishes();
             var result = new List<DishDTO>();
-            foreach(DishBusinessModel dish in dishModels)
+            foreach (DishBusinessModel dish in dishModels)
             {
                 result.Add(_mapper.Map<DishDTO>(dish));
             }
-            
+
             return Ok(result);
         }
+     
         [HttpPost("Create")]
         public IActionResult Create(DishDTO dish)
         {
